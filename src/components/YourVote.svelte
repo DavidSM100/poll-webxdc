@@ -31,10 +31,8 @@
       sender: window.webxdc.selfAddr,
       votes: voteIndexes,
     };
-    const info = `${window.webxdc.selfName} voted in "${pollState.poll!.question}"`;
     const update: SendingStatusUpdate<NewVote> = {
       payload: payload,
-      info: info,
       summary: totalPeople + " people voted",
     };
 
