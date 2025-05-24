@@ -4,9 +4,10 @@
   "version": "1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite serve --port 3000",
     "build": "vite build",
-    "preview": "vite preview",
+    "webxdc-dev": "webxdc-dev run http://localhost:3000",
+    "preview": "webxdc-dev run ./dist-xdc/app.xdc",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
   },
   "devDependencies": {
@@ -19,6 +20,7 @@
     "@tsconfig/svelte": "^5.0.4",
     "@webxdc/types": "^2.1.2",
     "@webxdc/vite-plugins": "^1.5.1",
+    "@webxdc/webxdc-dev": "^0.19.0",
     "svelte": "^5.28.1",
     "svelte-check": "^4.1.6",
     "tailwindcss": "^4.1.7",
