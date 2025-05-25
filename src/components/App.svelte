@@ -3,6 +3,10 @@
   import YourVote from "./YourVote.svelte";
   import Results from "./Results.svelte";
   import { pollState, activeView } from "../state.svelte";
+
+  if (pollState.votes[window.webxdc.selfAddr]) {
+    activeView.active = "results";
+  }
 </script>
 
 {#if pollState.poll}
