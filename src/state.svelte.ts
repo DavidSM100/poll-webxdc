@@ -36,6 +36,7 @@ function onNewPoll(poll: NewPoll) {
   pollState.poll = {
     question: poll.question,
     answers: poll.answers,
+    allowMultipleVotes: poll.allowMultipleVotes,
     time: poll.time,
   }
 }

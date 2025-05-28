@@ -1,6 +1,7 @@
 export interface Poll {
   question: string,
   answers: string[],
+  allowMultipleVotes: boolean,
   time: number
 }
 

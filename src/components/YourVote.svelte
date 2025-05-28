@@ -5,9 +5,16 @@
 
   let myVote = pollState.votes[window.webxdc.selfAddr];
   let votes: number[] = $state(myVote || []);
-  let canVote = $derived(votes.length > 0);
+  let vote = $state(myVote && myVote[0]);
+  let canVote = $derived.by(() => {
+    if (pollState.poll!.allowMultipleVotes) {
+      return votes.length > 0;
+    } else {
+      return vote !== undefined;
+    }
+  });
 
-  function vote(): void {
+  function sendVote(): void {
     let totalPeople = Object.keys(pollState.votes).length;
     if (!myVote) {
       totalPeople += 1;
@@ -18,6 +25,10 @@
       sender: window.webxdc.selfAddr,
       votes: votes,
     };
+    if (!pollState.poll!.allowMultipleVotes) {
+      payload.votes = [vote!];
+    }
+
     const update: SendingStatusUpdate<NewVote> = {
       payload: payload,
       summary: totalPeople + " people voted",
@@ -32,7 +43,16 @@
   <div class="space-y-2">
     {#each pollState.poll!.answers as answer, i}
       <label class="flex items-center space-x-2 select-none">
-        <input class="checkbox" type="checkbox" value={i} bind:group={votes} />
+        {#if pollState.poll!.allowMultipleVotes}
+          <input
+            class="checkbox"
+            type="checkbox"
+            value={i}
+            bind:group={votes}
+          />
+        {:else}
+          <input class="radio" type="radio" value={i} bind:group={vote} />
+        {/if}
         <span>{answer}</span>
       </label>
     {/each}
@@ -47,7 +67,7 @@
     <button
       class="btn preset-filled-primary-500"
       disabled={!canVote}
-      onclick={vote}
+      onclick={sendVote}
     >
       Vote
     </button>
