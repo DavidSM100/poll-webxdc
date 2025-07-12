@@ -3,24 +3,11 @@
   import { pollState, activeView } from "../state.svelte";
   import type { NewVote } from "../types";
 
-  let votes = $state(new Array(pollState.poll!.answers.length).fill(false));
-  let canVote = $derived(votes.some((val) => val));
-
   let myVote = pollState.votes[window.webxdc.selfAddr];
-  if (myVote) {
-    myVote.forEach((val) => {
-      votes[val] = true;
-    });
-  }
+  let votes: number[] = $state(myVote || []);
+  let canVote = $derived(votes.length > 0);
 
   function vote(): void {
-    let voteIndexes: number[] = [];
-    votes.forEach((val, i) => {
-      if (val) {
-        voteIndexes.push(i);
-      }
-    });
-
     let totalPeople = Object.keys(pollState.votes).length;
     if (!myVote) {
       totalPeople += 1;
@@ -29,7 +16,7 @@
     const payload: NewVote = {
       type: "vote",
       sender: window.webxdc.selfAddr,
-      votes: voteIndexes,
+      votes: votes,
     };
     const update: SendingStatusUpdate<NewVote> = {
       payload: payload,
@@ -45,7 +32,7 @@
   <div class="space-y-2">
     {#each pollState.poll!.answers as answer, i}
       <label class="flex items-center space-x-2 select-none">
-        <input class="checkbox" type="checkbox" bind:checked={votes[i]} />
+        <input class="checkbox" type="checkbox" value={i} bind:group={votes} />
         <span>{answer}</span>
       </label>
     {/each}
