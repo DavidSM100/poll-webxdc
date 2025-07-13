@@ -11,6 +11,7 @@
   let question: string = $state("");
   let answers: string[] = $state(["", ""]);
   let allowMultipleVotes = $state(false);
+  let allowChangingVotes = $state(false);
   let validQuestion: string = $derived(question.trim());
   let validAnswers: string[] = $derived(answers.filter((val) => val.trim()));
   let canRemoveAnswer: boolean = $derived(answers.length > 2);
@@ -32,6 +33,7 @@
       question: validQuestion,
       answers: validAnswers,
       allowMultipleVotes: allowMultipleVotes,
+      allowChangingVotes: allowChangingVotes,
       time: Date.now(),
     };
 
@@ -88,7 +90,7 @@
     </div>
   </div>
 
-  <div class="space-y-1">
+  <div class="space-y-1.5">
     <div class="text-xs">Settings</div>
     <div>
       <label class="flex justify-between select-none">
@@ -96,6 +98,15 @@
         <Switch
           checked={allowMultipleVotes}
           onCheckedChange={(e) => (allowMultipleVotes = e.checked)}
+        />
+      </label>
+    </div>
+    <div>
+      <label class="flex justify-between select-none">
+        Allow changing votes
+        <Switch
+          checked={allowChangingVotes}
+          onCheckedChange={(e) => (allowChangingVotes = e.checked)}
         />
       </label>
     </div>

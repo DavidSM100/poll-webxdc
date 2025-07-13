@@ -37,6 +37,7 @@ function onNewPoll(poll: NewPoll) {
     question: poll.question,
     answers: poll.answers,
     allowMultipleVotes: poll.allowMultipleVotes,
+    allowChangingVotes: poll.allowChangingVotes,
     time: poll.time,
   }
 }
@@ -44,6 +45,10 @@ function onNewPoll(poll: NewPoll) {
 function onNewVote(vote: NewVote) {
   const previosVote = pollState.votes[vote.sender];
   if (previosVote) {
+    if (!pollState.poll!.allowChangingVotes) {
+      return;
+    }
+
     // If user already voted, remove vote from the count
     previosVote.forEach((index) => {
       pollState.votesCount[index] -= 1;

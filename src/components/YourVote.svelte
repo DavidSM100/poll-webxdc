@@ -49,9 +49,20 @@
             type="checkbox"
             value={i}
             bind:group={votes}
+            disabled={!pollState.poll!.allowChangingVotes &&
+              myVote &&
+              !myVote.includes(i)}
           />
         {:else}
-          <input class="radio" type="radio" value={i} bind:group={vote} />
+          <input
+            class="radio"
+            type="radio"
+            value={i}
+            bind:group={vote}
+            disabled={!pollState.poll!.allowChangingVotes &&
+              myVote &&
+              !myVote.includes(i)}
+          />
         {/if}
         <span>{answer}</span>
       </label>
